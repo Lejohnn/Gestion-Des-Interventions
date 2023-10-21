@@ -1,2 +1,4 @@
-package com.example.intervenction.controllers;public class MailController {
+package com.example.intervenction.controllers;
+
+public class MailController {
 }

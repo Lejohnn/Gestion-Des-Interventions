@@ -1,2 +1,4 @@
-package com.example.intervenction.controllers;public class EtudiantController {
+package com.example.intervenction.controllers;
+
+public class EtudiantController {
 }

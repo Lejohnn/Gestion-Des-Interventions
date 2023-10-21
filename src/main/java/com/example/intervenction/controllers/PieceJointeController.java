@@ -1,2 +1,4 @@
-package com.example.intervenction.controllers;public class PieceJointeController {
+package com.example.intervenction.controllers;
+
+public class PieceJointeController {
 }

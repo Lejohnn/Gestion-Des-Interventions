@@ -30,6 +30,9 @@ public abstract class Utilisateurs {
     @Column(unique = true)
     private String telephone;
 
+    @Column(unique = true)
+    private String login;
+
     @Column(nullable = false, unique = true)
     private String email;
 

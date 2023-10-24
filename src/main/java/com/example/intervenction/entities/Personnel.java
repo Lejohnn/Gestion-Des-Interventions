@@ -18,6 +18,6 @@ public class Personnel extends Utilisateurs{
     }
 
     @ManyToOne
-    @JoinColumn(name="id_service", nullable=false)
+    @JoinColumn(name="service", nullable=false)
     private Service service;
 }

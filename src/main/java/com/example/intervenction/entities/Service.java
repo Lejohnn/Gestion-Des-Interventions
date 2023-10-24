@@ -22,9 +22,5 @@ public class Service {
     private String description;
     private String statut;
 
-    @OneToMany( targetEntity=Mail.class, mappedBy="service" )
-    private List<Mail> mailList = new ArrayList<>();
 
-    @OneToMany( targetEntity=Personnel.class, mappedBy="service" )
-    private List<Personnel> personnelList = new ArrayList<>();
 }

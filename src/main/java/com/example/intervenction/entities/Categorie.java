@@ -23,6 +23,7 @@ public class Categorie {
     private String description;
     private String statut;
 
-    @OneToMany( targetEntity=SousCategorie.class, mappedBy="categorie" )
-    private List<SousCategorie> sousCategories = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name="id_service", nullable=false)
+    private Service service;
 }

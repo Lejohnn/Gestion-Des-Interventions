@@ -18,13 +18,11 @@ public class PieceJointe {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-
+    @Column(unique = true)
+    private String path;
 
     @ManyToOne
     @JoinColumn(name="id_demande", nullable=false)
     private Demande demande;
-
-    @Column(unique = true)
-    private String path;
 
 }

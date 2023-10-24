@@ -25,10 +25,6 @@ public class Mail {
     private String statut; // envoyé ou non-envoyé
 
     @ManyToOne
-    @JoinColumn(name="id_utilisateur", nullable=false)
-    private Etudiant etudiant;
-
-    @ManyToOne
-    @JoinColumn(name="id_service", nullable=false)
-    private Service service;
+    @JoinColumn(name="id_demande", nullable=false)
+    private Demande demande;
 }

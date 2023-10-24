@@ -31,10 +31,4 @@ public class Etudiant extends Utilisateurs {
     @Column(nullable = false)
     private String filiere;
 
-    @OneToMany( targetEntity=Demande.class, mappedBy="etudiant" )
-    private List<Demande> demandeList = new ArrayList<>();
-
-    @OneToMany( targetEntity=Mail.class, mappedBy="etudiant" )
-    private List<Mail> mailList = new ArrayList<>();
-
 }

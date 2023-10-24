@@ -31,10 +31,14 @@ public class Demande {
     private String statut;
 
     @ManyToOne
-    @JoinColumn(name="id_utilisateur", nullable=false)
+    @JoinColumn(name="id_etudiant", nullable=false)
     private Etudiant etudiant;
 
+    @ManyToOne
+    @JoinColumn(name="sous_categorie", nullable=false)
+    private SousCategorie sousCategorie;
 
-    @OneToMany( targetEntity=PieceJointe.class, mappedBy="demande" )
-    private List<PieceJointe> pieceJointes = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name="id_personnel")
+    private Personnel personnel;
 }

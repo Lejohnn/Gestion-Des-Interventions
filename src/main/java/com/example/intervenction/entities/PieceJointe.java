@@ -1,6 +1,5 @@
 package com.example.intervenction.entities;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,18 +10,15 @@ import lombok.*;
 @Getter
 @Setter
 @Data
-@Table(name = "piecejointe")
-
+@Table(name = "pieces_jointes")
 public class PieceJointe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
-    @Column(unique = true)
+    private Long id;
+    private String nom;
     private String path;
 
     @ManyToOne
-    @JoinColumn(name="id_demande", nullable=false)
+    @JoinColumn(name = "demande_id")
     private Demande demande;
-
 }

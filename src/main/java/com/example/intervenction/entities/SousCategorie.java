@@ -1,6 +1,5 @@
 package com.example.intervenction.entities;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,18 +10,18 @@ import lombok.*;
 @Getter
 @Setter
 @Data
-@Table(name = "souscategorie")
-
+@Table(name = "sous_categorie")
 public class SousCategorie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id_sous_categorie;
-    private String libelle;
-    private String sigle;
-    private String description;
-    private String statut;
+    private Long id;
+    private String nom;
 
     @ManyToOne
-    @JoinColumn(name="id_categorie", nullable=false)
+    @JoinColumn(name = "categorie_id")
     private Categorie categorie;
+
+    @ManyToOne
+    @JoinColumn(name = "departement_id")
+    private Departement departement;
 }

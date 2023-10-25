@@ -1,23 +1,20 @@
 package com.example.intervenction.entities;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @ToString
 @Getter
 @Setter
 @Data
-@Table(name = "personnel")
-@DiscriminatorValue("1")
-public class Personnel extends Utilisateurs{
-
-    public Personnel() {
-        super();
-    }
+@Table(name = "personnels")
+public class Personnel extends Utilisateur {
+    private String poste;
 
     @ManyToOne
-    @JoinColumn(name="service", nullable=false)
-    private Service service;
+    @JoinColumn(name = "departement_id")
+    private Departement departement;
 }

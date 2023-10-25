@@ -1,11 +1,7 @@
 package com.example.intervenction.entities;
 
-
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -18,12 +14,6 @@ import java.util.List;
 public class Categorie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id_categorie;
-    private String libelle;
-    private String description;
-    private String statut;
-
-    @ManyToOne
-    @JoinColumn(name="id_service", nullable=false)
-    private Service service;
+    private Long id;
+    private String nom;
 }

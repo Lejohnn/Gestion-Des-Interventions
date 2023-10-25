@@ -1,34 +1,24 @@
 package com.example.intervenction.entities;
 
-
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.persistence.Table;
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@NoArgsConstructor
 @AllArgsConstructor
 @ToString
 @Getter
 @Setter
 @Data
-@Table(name = "etudiant")
-@DiscriminatorValue("2")
-
-public class Etudiant extends Utilisateurs {
-
-    public Etudiant(){
-        super();
-    }
-
-    @Column(unique = true, nullable = false)
+@Table(name = "etudiants")
+public class Etudiant extends Utilisateur{
     private String matricule;
 
-    @Column(nullable = false)
-    private String classe;
-
-    @Column(nullable = false)
-    private String filiere;
-
+    @OneToMany(mappedBy = "etudiant")
+    private List<Demande> demandes;
 }

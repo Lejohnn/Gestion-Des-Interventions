@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" html xmlns:th="http://www.thymeleaf.org" >
+
+<head>
+    <!-- Required meta tags -->
+    <th:block th:replace="fragments/_head.html::head"></th:block>
+</head>
+<body>
+<div class="container-scroller">
+    <!-- partial:partials/_navbar.html -->
+
+    <!--_header-->
+    <th:block th:replace="/fragments/_header.html::header"></th:block>
+
+    <!--fin header-->
+    <div class="container-fluid page-body-wrapper">
+        <!-- partial:partials/_settings-panel.html -->
+        <div class="theme-setting-wrapper">
+            <div id="settings-trigger"><i class="ti-settings"></i></div>
+            <div id="theme-settings" class="settings-panel">
+                <i class="settings-close ti-close"></i>
+                <p class="settings-heading">SIDEBAR SKINS</p>
+                <div class="sidebar-bg-options selected" id="sidebar-light-theme"><div class="img-ss rounded-circle bg-light border mr-3"></div>Light</div>
+                <div class="sidebar-bg-options" id="sidebar-dark-theme"><div class="img-ss rounded-circle bg-dark border mr-3"></div>Dark</div>
+                <p class="settings-heading mt-2">HEADER SKINS</p>
+                <div class="color-tiles mx-0 px-4">
+                    <div class="tiles success"></div>
+                    <div class="tiles warning"></div>
+                    <div class="tiles danger"></div>
+                    <div class="tiles info"></div>
+                    <div class="tiles dark"></div>
+                    <div class="tiles default"></div>
+                </div>
+            </div>
+        </div>
+        <!-- partial -->
+        <!-- partial:partials/_sidebar.html -->
+        <th:block th:replace="/fragments/_sidebar.html::navNotes"></th:block>
+
+        <!-- partial -->
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <div class="row">
+                    <div class="card container-fluid p-2 mb-3">
+                        <form action="" method="post">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <select name="personnel_departement_id_save" id="departement_id_save" class="form-select">
+                                        <option value="">Département</option>
+                                        <option th:each="departement: ${departementList}" th:value="${departement.id}" th:text="${departement.nom}"></option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" name="personnel_nom_save" id="personnel_nom_save" class="form-control col-md-12" placeholder="Entrez le nom">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="email" name="personnel_email_save" id="personnel_email_save"  class="form-control col-md-12" placeholder="Entrez l'email">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="number"  name="personnel_telephone_save" id="personnel_telephone_save"  maxlength="9" minlength="9" class="form-control col-md-12" placeholder="Entrez le téléphone">
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-3">
+                                    <input type="text" name="personnel_login_save" id="personnel_login_save" class="form-control col-md-12" placeholder="Entrez le login">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="password" name="personnel_password_save" id="personnel_password_save" class="form-control col-md-12" placeholder="Entrez le mot de passe">
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" name="personnel_poste_save" id="personnel_poste_save" maxlength="9" minlength="9" class="form-control col-md-12" placeholder="Entrez le poste">
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-primary btn-block">
+                                        Enregistrer
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="card col-md-12 grid-margin " th:switch="${personnelList}">
+                        <div class="card-body" th:case="*">
+                            <table id="souscategorie" class="table table-striped table-bordered" style="width:100%">
+                                <thead>
+                                <tr>
+                                    <th class="col-md-1">ID</th>
+                                    <th>Département</th>
+                                    <th>Nom</th>
+                                    <th>Email</th>
+                                    <th>Téléphone</th>
+                                    <th>Statut</th>
+                                    <th>Poste</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="item : ${personnelList}">
+                                    <td th:text="${item.id}"></td>
+                                    <td th:text="${item.departement.nom}"></td>
+                                    <td th:text="${item.nom}"></td>
+                                    <td th:text="${item.email}"></td>
+                                    <td th:text="${item.telephone}"></td>
+                                    <td>
+                                        <span th:text="${item.statut}" class="badge bg-success" th:if="${item.statut}== 'actif'"></span>
+                                        <span th:text="${item.statut}" class="badge bg-danger" th:if="${item.statut}== 'inactif'"></span>
+                                    </td>
+                                    <td th:text="${item.poste}"></td>
+                                    <td>
+                                        <button type="button" th:attr="onclick='readyUpdateSousCat(\'' + ${item.id} + '\')'" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
+                                            Modifier
+                                        </button>
+                                        <button th:if="${item.statut}== 'actif'" type="button" th:attr="onclick='readyActivePeronnel(\'' + ${item.id} + '\')'" class="btn btn-success btn-sm">
+                                            Réactiver
+                                        </button>
+                                        <button th:if="${item.statut}== 'inactif'" type="button" th:attr="onclick='readyInactivePeronnel(\'' + ${item.id} + '\')'" class="btn btn-danger btn-sm">
+                                            Désactiver
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Modification d'un personnel</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <footer class="footer">
+                <th:block th:replace="./fragments/_footer.html::footer"></th:block>
+            </footer>
+        </div>
+    </div>
+
+    <!-- plugins:js -->
+    <th:block th:replace="./fragments/_js.html::js"></th:block>
+
+</div>
+</body>
+
+
+</html>
+

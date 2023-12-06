@@ -1,6 +1,5 @@
 package com.example.intervenction.services;
 
-import com.example.intervenction.entities.Departement;
 import com.example.intervenction.entities.Etudiant;
 
 import java.util.List;
@@ -13,6 +12,8 @@ public interface EtudiantServ {
     String add(Etudiant etudiant);
 
     String updte(Long id, Etudiant etudiant);
+
+    Etudiant login(String login, String password);
 
     String on(Long id);
 

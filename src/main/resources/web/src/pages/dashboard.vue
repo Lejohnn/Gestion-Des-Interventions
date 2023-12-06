@@ -1,115 +1,144 @@
 <script setup>
-import AnalyticsAward from '@/views/dashboard/AnalyticsAward.vue'
-import AnalyticsBarCharts from '@/views/dashboard/AnalyticsBarCharts.vue'
-import AnalyticsDepositWithdraw from '@/views/dashboard/AnalyticsDepositWithdraw.vue'
-import AnalyticsSalesByCountries from '@/views/dashboard/AnalyticsSalesByCountries.vue'
-import AnalyticsTotalEarning from '@/views/dashboard/AnalyticsTotalEarning.vue'
-import AnalyticsTotalProfitLineCharts from '@/views/dashboard/AnalyticsTotalProfitLineCharts.vue'
-import AnalyticsTransactions from '@/views/dashboard/AnalyticsTransactions.vue'
-import AnalyticsUserTable from '@/views/dashboard/AnalyticsUserTable.vue'
-import AnalyticsWeeklyOverview from '@/views/dashboard/AnalyticsWeeklyOverview.vue'
-import CardStatisticsVertical from '@core/components/cards/CardStatisticsVertical.vue'
+import { useRoute } from 'vue-router'
+import Categorie from './categorie.vue'
+import sousCategorie from './sousCategorie.vue'
+import etudiant from './etudiant.vue'
+import personnel from './personnel.vue'
+import demande from './demande.vue'
+import departements from './departements.vue'
+import mails from './mails.vue'
+import Swal from 'sweetalert2'
 
-const totalProfit = {
-  title: 'Total Profit',
-  color: 'secondary',
-  icon: 'mdi-poll',
-  stats: '$25.6k',
-  change: 42,
-  subtitle: 'Weekly Project',
-}
+const route = useRoute()
+const activeTab = ref(route.params.tab)
 
-const newProject = {
-  title: 'New Project',
-  color: 'primary',
-  icon: 'mdi-briefcase-variant-outline',
-  stats: '862',
-  change: -18,
-  subtitle: 'Yearly Project',
-}
+// tabs
+const tabs = [
+  {
+    title: 'Demandes',
+    icon: 'mdi-book-open-page-variant-outline',
+    tab: 'demande',
+  },
+]
+// const vues = ref();
+// let result;
+// let account = JSON.parse(localStorage.getItem('account'))
+// if (account.created_by === "etudiant") {
+//   result =  true
+// } else {
+//   result =  false
+// }
+
+// if (account== null) {
+//   location.assign("http://localhost:5173/login")
+// }
+// console.log(result)
+
+// tabs
+const tabs1 = [
+  {
+    title: 'Catégories',
+    icon: 'mdi-account-hard-hat-outline',
+    tab: 'categorie',
+  },
+  {
+    title: 'Sous-catégories',
+    icon: 'mdi-alarm-light',
+    tab: 'sousCategorie',
+  },
+  {
+    title: 'Départements',
+    icon: 'mdi-home-outline',
+    tab: 'departements',
+  },
+  {
+    title: 'Etudiants',
+    icon: 'mdi-account-graduation-outline',
+    tab: 'etudiant',
+  },
+  {
+    title: 'Personnels',
+    icon: 'mdi-account-pilot',
+    tab: 'personnel',
+  },
+  {
+    title: 'Demandes',
+    icon: 'mdi-book-open-page-variant-outline',
+    tab: 'demande',
+  },
+]
 </script>
 
 <template>
-  <VRow class="match-height">
-    <VCol
-      cols="12"
-      md="4"
+  <div>
+    <VTabs
+      v-model="activeTab"
+      show-arrows
+      class="v-tabs-pill"
     >
-      <AnalyticsAward />
-    </VCol>
-
-    <VCol
-      cols="12"
-      md="8"
-    >
-      <AnalyticsTransactions />
-    </VCol>
-
-    <VCol
-      cols="12"
-      md="4"
-    >
-      <AnalyticsWeeklyOverview />
-    </VCol>
-
-    <VCol
-      cols="12"
-      md="4"
-    >
-      <AnalyticsTotalEarning />
-    </VCol>
-
-    <VCol
-      cols="12"
-      md="4"
-    >
-      <VRow class="match-height">
-        <VCol
-          cols="12"
-          sm="6"
+      <span v-if="result">
+        <VTab
+          v-for="item in tabs"
+          :key="item.icon"
+          :value="item.tab"
         >
-          <AnalyticsTotalProfitLineCharts />
-        </VCol>
+          <VIcon
+            size="20"
+            start
+            :icon="item.icon"
+          />
+          {{ item.title }}
+        </VTab>
+      </span>
 
-        <VCol
-          cols="12"
-          sm="6"
+      <span v-if="!result">
+        <VTab
+          v-for="item in tabs1"
+          :key="item.icon"
+          :value="item.tab"
         >
-          <CardStatisticsVertical v-bind="totalProfit" />
-        </VCol>
+          <VIcon
+            size="20"
+            start
+            :icon="item.icon"
+          />
+          {{ item.title }}
+        </VTab>
+      </span>
+    </VTabs>
 
-        <VCol
-          cols="12"
-          sm="6"
-        >
-          <CardStatisticsVertical v-bind="newProject" />
-        </VCol>
-
-        <VCol
-          cols="12"
-          sm="6"
-        >
-          <AnalyticsBarCharts />
-        </VCol>
-      </VRow>
-    </VCol>
-
-    <VCol
-      cols="12"
-      md="4"
+    <VWindow
+      v-model="activeTab"
+      class="mt-5 disable-tab-transition"
     >
-      <AnalyticsSalesByCountries />
-    </VCol>
+      <!-- Account -->
+      <VWindowItem value="categorie">
+        <Categorie />
+      </VWindowItem>
 
-    <VCol
-      cols="12"
-      md="8"
-    >
-      <AnalyticsDepositWithdraw />
-    </VCol>
+      <VWindowItem value="sousCategorie">
+        <sousCategorie />
+      </VWindowItem>
 
-    <VCol cols="12">
-      <AnalyticsUserTable />
-    </VCol>
-  </VRow>
+      <VWindowItem value="departements">
+        <departements />
+      </VWindowItem>
+
+      <VWindowItem value="etudiant">
+        <etudiant />
+      </VWindowItem>
+
+      <VWindowItem value="personnel">
+        <personnel />
+      </VWindowItem>
+
+      <VWindowItem value="demande">
+        <demande />
+      </VWindowItem>
+
+      <VWindowItem value="mails">
+        <mails />
+      </VWindowItem>
+    </VWindow>
+  </div>
 </template>

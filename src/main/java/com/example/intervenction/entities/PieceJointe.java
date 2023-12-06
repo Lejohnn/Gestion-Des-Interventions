@@ -15,8 +15,18 @@ public class PieceJointe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nom;
-    private String path;
+
+    @Column(name = "fileName")
+    private String fileName;
+
+    @Column(name = "fileType")
+    private String fileType;
+
+    @Column(name = "uniqueFileName")
+    private String uniqueFileName;
+
+    @Lob
+    private byte[] data;
 
     @ManyToOne
     @JoinColumn(name = "demande_id")

@@ -1,17 +1,19 @@
 package com.example.intervenction.services;
 
+import com.example.intervenction.entities.Demande;
 import com.example.intervenction.entities.PieceJointe;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface PieceJointeServ {
-    List<PieceJointe> getAll();
+    List<PieceJointe> getAllFiles();
 
-    PieceJointe getOne(Long id);
+    PieceJointe getOneFile(Long id);
 
-    String add(Long demande_id, PieceJointe pieceJointe);
+    String saveAttachment(Long demande_id, MultipartFile file, PieceJointe pieceJointe) throws Exception;
 
-    String update(Long pieceJointe_id, Long demande_id, PieceJointe pieceJointe);
+    void saveFiles(Long demande_id, MultipartFile[] files, PieceJointe pieceJointe) throws Exception;
 
-    String clean(Long pieceJointe_id);
+    String deleteAttachment(Long pieceJointe_id) throws Exception;
 }

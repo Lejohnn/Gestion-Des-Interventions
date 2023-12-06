@@ -79,7 +79,7 @@ public class SouscategorieImp implements SouscategorieServ {
             if (optionalDepartement.isPresent()) {
                 Departement departement = optionalDepartement.get();
 
-                Optional<SousCategorie> optionalSousCategorie = souscategorieRepo.findById(departement_id);
+                Optional<SousCategorie> optionalSousCategorie = souscategorieRepo.findById(sousCategorie_id);
                 if (optionalSousCategorie.isPresent()) {
                     SousCategorie sousCategorie1 = optionalSousCategorie.get();
                     sousCategorie1.setDepartement(departement);

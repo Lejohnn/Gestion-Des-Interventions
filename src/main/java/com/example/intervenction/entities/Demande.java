@@ -19,6 +19,8 @@ public class Demande {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String statut;
+    private String objet;
+    private String message;
 
     @ManyToOne
     @JoinColumn(name = "sous_categorie_id")

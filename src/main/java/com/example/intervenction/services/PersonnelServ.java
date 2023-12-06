@@ -14,6 +14,8 @@ public interface PersonnelServ {
 
     String updte(Long personnel_id, Long departement_id, Personnel personnel);
 
+    Personnel login(String login, String password);
+
     String on(Long id);
 
     String off(Long id);

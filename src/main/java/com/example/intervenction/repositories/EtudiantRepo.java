@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EtudiantRepo extends JpaRepository<Etudiant, Long> {
+    Etudiant findByLoginAndPassword(String login, String password);
 }

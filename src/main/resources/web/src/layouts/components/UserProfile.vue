@@ -1,46 +1,17 @@
-<script setup>
-import avatar1 from '@images/avatars/avatar-1.png'
-</script>
-
 <template>
-  <VBadge
-    dot
-    location="bottom right"
-    offset-x="3"
-    offset-y="3"
-    color="success"
-    bordered
-  >
-    <VAvatar
-      class="cursor-pointer"
-      color="primary"
-      variant="tonal"
-    >
+  <VBadge dot location="bottom right" offset-x="3" offset-y="3" color="success" bordered >
+    <VAvatar class="cursor-pointer" color="primary" variant="tonal" >
       <VImg :src="avatar1" />
 
       <!-- SECTION Menu -->
-      <VMenu
-        activator="parent"
-        width="230"
-        location="bottom end"
-        offset="14px"
-      >
+      <VMenu activator="parent" width="230" location="bottom end" offset="14px" >
         <VList>
           <!-- 👉 User Avatar & Name -->
           <VListItem>
             <template #prepend>
               <VListItemAction start>
-                <VBadge
-                  dot
-                  location="bottom right"
-                  offset-x="3"
-                  offset-y="3"
-                  color="success"
-                >
-                  <VAvatar
-                    color="primary"
-                    variant="tonal"
-                  >
+                <VBadge dot location="bottom right" offset-x="3" offset-y="3" color="success" >
+                  <VAvatar color="primary" variant="tonal" >
                     <VImg :src="avatar1" />
                   </VAvatar>
                 </VBadge>
@@ -48,78 +19,19 @@ import avatar1 from '@images/avatars/avatar-1.png'
             </template>
 
             <VListItemTitle class="font-weight-semibold">
-              John Doe
+              {{pseudo}}
             </VListItemTitle>
-            <VListItemSubtitle>Admin</VListItemSubtitle>
+            <VListItemSubtitle> {{type}} </VListItemSubtitle>
           </VListItem>
-          <VDivider class="my-2" />
-
-          <!-- 👉 Profile -->
-          <VListItem link>
-            <template #prepend>
-              <VIcon
-                class="me-2"
-                icon="mdi-account-outline"
-                size="22"
-              />
-            </template>
-
-            <VListItemTitle>Profile</VListItemTitle>
-          </VListItem>
-
-          <!-- 👉 Settings -->
-          <VListItem link>
-            <template #prepend>
-              <VIcon
-                class="me-2"
-                icon="mdi-cog-outline"
-                size="22"
-              />
-            </template>
-
-            <VListItemTitle>Settings</VListItemTitle>
-          </VListItem>
-
-          <!-- 👉 Pricing -->
-          <VListItem link>
-            <template #prepend>
-              <VIcon
-                class="me-2"
-                icon="mdi-currency-usd"
-                size="22"
-              />
-            </template>
-
-            <VListItemTitle>Pricing</VListItemTitle>
-          </VListItem>
-
-          <!-- 👉 FAQ -->
-          <VListItem link>
-            <template #prepend>
-              <VIcon
-                class="me-2"
-                icon="mdi-help-circle-outline"
-                size="22"
-              />
-            </template>
-
-            <VListItemTitle>FAQ</VListItemTitle>
-          </VListItem>
-
-          <!-- Divider -->
           <VDivider class="my-2" />
 
           <!-- 👉 Logout -->
-          <VListItem to="/login">
+          <VListItem @click.prevent="logout">
             <template #prepend>
-              <VIcon
-                class="me-2"
-                icon="mdi-logout"
-                size="22"
-              />
+              <VIcon class="me-2" icon="mdi-logout" size="22" />
             </template>
 
-            <VListItemTitle>Logout</VListItemTitle>
+            <VListItemTitle>Déconnexion</VListItemTitle>
           </VListItem>
         </VList>
       </VMenu>
@@ -127,3 +39,69 @@ import avatar1 from '@images/avatars/avatar-1.png'
     </VAvatar>
   </VBadge>
 </template>
+
+<script>
+
+  import axios from "axios";
+  import Swal from 'sweetalert2'
+  import avatar1 from '@images/avatars/avatar-1.png'
+
+  export default {
+    setup() {
+      return {
+        avatar1,
+      }
+    },
+
+    data(){
+      return {
+        type: '',
+        pseudo: '',
+      }
+    },
+
+    created() {
+      let account = JSON.parse(localStorage.getItem("account"));
+      if (account){
+        if (account.created_by == 'etudiant') {
+        this.type = "Etudiant";
+        this.pseudo = account.matricule;
+      } 
+      else {
+        this.type = "Personnel";
+        this.pseudo = account.nom;
+      }
+      } 
+      
+    },
+
+    methods: {
+      async logout(){
+        Swal.fire({
+          title: 'Êtes vous sûres ?',
+          html: "Hello, s'il vous plait souhaitez vous vraiment détruire votre session ? Cette action est irréversible.",
+          showDenyButton: true,
+          showCancelButton: false,
+          confirmButtonText: "Oui je souhaite.",
+          denyButtonText: `Annuler`,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            Swal.fire({
+              'icon' : 'success',
+              'text' : "Déconnexion éffectuée avec succès.",
+              'toast' : true,
+              'position' : 'top-end',
+              'showCancelButton' : false,
+              'showConfirmButton' : false,
+              'timer': 5000,
+              'timerProgressBar': true
+            });
+            this.$router.push("/login");
+            window.localStorage.clear();
+          } 
+          else if (result.isDenied) {}
+        })
+      }
+    }
+  }
+</script>

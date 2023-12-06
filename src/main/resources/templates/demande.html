@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en" html xmlns:th="http://www.thymeleaf.org" >
+
+<head>
+    <!-- Required meta tags -->
+    <th:block th:replace="fragments/_head.html::head"></th:block>
+</head>
+<body>
+<div class="container-scroller">
+    <!-- partial:partials/_navbar.html -->
+
+    <!--_header-->
+    <th:block th:replace="/fragments/_header.html::header"></th:block>
+
+    <!--fin header-->
+    <div class="container-fluid page-body-wrapper">
+        <!-- partial:partials/_settings-panel.html -->
+        <div class="theme-setting-wrapper">
+            <div id="settings-trigger"><i class="ti-settings"></i></div>
+            <div id="theme-settings" class="settings-panel">
+                <i class="settings-close ti-close"></i>
+                <p class="settings-heading">SIDEBAR SKINS</p>
+                <div class="sidebar-bg-options selected" id="sidebar-light-theme"><div class="img-ss rounded-circle bg-light border mr-3"></div>Light</div>
+                <div class="sidebar-bg-options" id="sidebar-dark-theme"><div class="img-ss rounded-circle bg-dark border mr-3"></div>Dark</div>
+                <p class="settings-heading mt-2">HEADER SKINS</p>
+                <div class="color-tiles mx-0 px-4">
+                    <div class="tiles success"></div>
+                    <div class="tiles warning"></div>
+                    <div class="tiles danger"></div>
+                    <div class="tiles info"></div>
+                    <div class="tiles dark"></div>
+                    <div class="tiles default"></div>
+                </div>
+            </div>
+        </div>
+        <!-- partial -->
+        <!-- partial:partials/_sidebar.html -->
+        <th:block th:replace="/fragments/_sidebar.html::navNotes"></th:block>
+
+        <!-- partial -->
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <div class="row">
+                    <div id="item-link-etudiant1" class="card container-fluid p-2 mb-3">
+                        <form th:action="@{/addDem}" th:object="${demande}" method="POST" style="height: 350px">
+                            <div class="row">
+                                <input type="hidden" name="demande_save_etudiant_id" id="demande_save_etudiant_id" class="form-control col-md-12  bg-white text-dark" placeholder="Etudiant Converné...." readonly>
+
+                                <div class="col-md-6" style="margin-top: 50px">
+                                    <select name="demande_save_id_sous_categorie" id="demande_save_id_sous_categorie" class="form-select">
+                                        <option value="">Selectionnez la sous-catégorie</option>
+                                        <option th:each="souscategorie: ${sousCategorieList}" th:value="${souscategorie.id}" th:text="${souscategorie.nom}"></option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6" style="margin-top: 50px">
+                                    <input type="text" name="demande_save_objet" id="demande_save_objet" th:field="*{objet}" class="form-control col-md-12 bg-white text-dark" placeholder="Objet...." >
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-6" style="margin-top: 60px">
+                                    <input type="text" name="demande_save_message" id="demande_save_message" th:field="*{message}"  class="form-control col-md-12 bg-white text-dark" placeholder="Message...." >
+                                </div>
+                                <div class="col-md-3 btn-primary"  style="margin-top: 60px; border-radius: 15px">
+                                    <a class="dropdown-item" id="item-link-etudiant2" href="#"   data-toggle="modal" data-target="#exampleModal">Ajouter une pièce jointe</a>
+                                </div>
+                                <div class="col-md-2"style="margin-top: 70px; margin-left: 500px">
+                                    <button type="submit" id="demande-btn-submit" class="btn btn-primary btn-block">
+                                        Enregistrer
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="card col-md-12 grid-margin " th:switch="${demandeList}">
+                        <div class="card-body" th:case="*">
+                            <table id="categorie" class="table table-bordered" style="width:100%">
+                                <thead>
+                                <tr>
+                                    <th>Etudiant</th>
+                                    <th>Responsable</th>
+                                    <th>Objet</th>
+                                    <th>Message</th>
+                                    <th>Sous catégorie</th>
+                                    <th>Département</th>
+                                    <th>Pièce Jointe</th>
+                                    <th>Statut</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="item : ${demandeList}">
+                                    <td th:text="${item.etudiant.nom}"></td>
+                                    <td th:text="${item != null ? item.personnel != null ? item.personnel.nom : 'N/A' : 'N/A'}"></td>
+                                    <td th:text="${item.objet}"></td>
+                                    <td th:text="${item.message}"></td>
+                                    <td th:text="${item.sousCategorie.nom}"></td>
+                                    <td th:text="${item.sousCategorie.departement.nom}"></td>
+                                    <td>
+                                        <span th:class="${item.piecesJointes.size() > 0 && item.piecesJointes[0].fileName != '' ? '' : 'd-none'}">
+                                            <a href="" target="_blank">
+                                                <i class="icon-layout file-icon"></i> pièce jointe
+                                            </a>
+                                        </span>
+                                        <span th:class="${item.piecesJointes.size() <= 0 || item.piecesJointes[0].fileName == '' ? '' : 'd-none'}">
+                                            Aucune pièce jointe
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span th:text="${item.statut}" th:class="${item.statut == 'recu' ? 'badge badge-warning' : 'd-none'}"></span>
+                                        <span th:text="${item.statut}" th:class="${item.statut == 'pris en charge' ? 'badge badge-primary' : 'd-none'}"></span>
+                                        <span th:text="${item.statut}" th:class="${item.statut == 'finalisée' ? 'badge badge-success' : 'd-none'}"></span>
+                                        <span th:text="${item.statut}" th:class="${item.statut == 'rejettée' ? 'badge badge-danger' : 'd-none'}"></span>
+                                    </td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="border: none">
+                                                taches
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <a class="dropdown-item" id="item-link-etudiant2" href="#" th:attr="onclick='readyUploadFile(\'' + ${item.id} + '\')'"  data-toggle="modal" data-target="#exampleModal">Ajouter une pièce jointe</a>
+                                                <a class="dropdown-item" id="item-link-personnel4" href="#" th:attr="onclick='readyToTakeChargeOfRequest(1, \'' + ${item.id} + '\')'">Prendre en charge la demande</a>
+                                                <a class="dropdown-item" id="item-link-personnel5" href="#" th:attr="onclick='readyToApproveChargeOfRequest(1, \'' + ${item.id} + '\')'">Approuver la demande</a>
+                                                <a class="dropdown-item" id="item-link-personnel6" href="#" th:attr="onclick='readyToRejetChargeOfRequest(1, \'' + ${item.id} + '\')'">Rejetter la demande</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Ajouter Une Pièce Jointe</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form id="file-upload-form">
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <input type="hidden" id="id-demande-file-upload">
+                                                <input type="file" id="file-upload-input" name="file" class="form-control col-md-12 text-capitalize" placeholder="Entrez le nom de la catégorie">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="reset" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                                        <button type="submit" class="btn btn-primary">Importer</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <footer class="footer">
+                <th:block th:replace="./fragments/_footer.html::footer"></th:block>
+            </footer>
+        </div>
+    </div>
+
+    <!-- plugins:js -->
+
+    <script>
+        $(document).ready(function () {
+            var account = JSON.parse(localStorage.getItem('account'));
+            $('tr:not(:first-child)').each(function () { // Exclude the first child (table header)
+                var personnelNom = $(this).find('td:nth-child(2)').text(); // Adjust the index based on your structure
+                var etudiantNom = $(this).find('td:nth-child(1)').text(); // Adjust the index based on your structure
+                var departementNom = $(this).find('td:nth-child(6)').text(); // Adjust the index based on your structure
+
+                if (account !== null && account.nom === personnelNom && account.statut === 'personnel') {
+                    $(this).addClass('bg-light');
+                    if(account.departement.nom != departementNom){
+                        console.log(account.departement.nom)
+                        console.log(departementNom)
+                       $(this).addClass('d-none');
+                    }
+                } else if (account !== null && account.nom !== etudiantNom && account.statut === 'etudiant') {
+                    $(this).addClass('d-none');
+                }
+            });
+        });
+    </script>
+
+</div>
+</body>
+
+
+</html>
+

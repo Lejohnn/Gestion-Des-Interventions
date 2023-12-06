@@ -1,16 +1,19 @@
 package com.example.intervenction.implement;
 
-import com.example.intervenction.entities.Categorie;
 import com.example.intervenction.entities.Demande;
-import com.example.intervenction.entities.Departement;
 import com.example.intervenction.entities.Mail;
 import com.example.intervenction.repositories.DemandeRepo;
 import com.example.intervenction.repositories.MailRepo;
 import com.example.intervenction.services.MailServ;
+import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +29,10 @@ public class MailImp implements MailServ {
     private JavaMailSender mailSender;
 
 
+    @Value("${spring.mail.username}")
+    private String FromEmail;
+
+
     public MailImp(MailRepo mailRepo, DemandeRepo demandeRepo){
         this.mailRepo = mailRepo;
         this.demandeRepo = demandeRepo;
@@ -39,7 +46,6 @@ public class MailImp implements MailServ {
         return liste;
     }
 
-
     @Override
     public Mail getOne(Long id) {
         return mailRepo.findById(id).get();
@@ -51,11 +57,17 @@ public class MailImp implements MailServ {
         if (demandeOptional.isPresent()) {
             Demande demande = demandeOptional.get();
             mail.setDemande(demande);
-            Mail save = mailRepo.save(mail);
-            if (save != null) {
-                this.send(demande.getEtudiant().getEmail(), mail.getMessage(), mail.getObjet());
-                return "Le mail a été envoyé avec succès";
-            }else{
+            String result = this.sendMail(FromEmail, demande.getEtudiant().getEmail(), mail.getMessage(), mail.getObjet());
+            if (result == "send") {
+                Mail save = mailRepo.save(mail);
+                if (save != null) {
+                    this.send(demande.getEtudiant().getEmail(), mail.getMessage(), mail.getObjet());
+                    return "Le mail a été envoyé avec succès";
+                }else{
+                    return "Le mail n'a pas pue etre envoyé";
+                }
+            }
+            else{
                 return "Le mail n'a pas pue etre envoyé";
             }
         }
@@ -73,5 +85,21 @@ public class MailImp implements MailServ {
         message.setText(messages);
         message.setSubject(objet);
         mailSender.send(message);
+    }
+
+    public String sendMail(String from, String to, String subject, String body) {
+        try {
+
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true); // enlever cc
+            mimeMessageHelper.setFrom(from);
+            mimeMessageHelper.setTo(to);
+            mimeMessageHelper.setSubject(subject);
+            mimeMessageHelper.setText(body);
+            mailSender.send(mimeMessage);
+            return "send";
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

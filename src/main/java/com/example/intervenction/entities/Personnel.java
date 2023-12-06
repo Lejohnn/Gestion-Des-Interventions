@@ -11,7 +11,16 @@ import lombok.*;
 @Setter
 @Data
 @Table(name = "personnels")
-public class Personnel extends Utilisateur {
+public class Personnel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String nom;
+    private String email;
+    private String telephone;
+    private String login;
+    private String password;
+    private String statut;
     private String poste;
 
     @ManyToOne

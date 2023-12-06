@@ -1,9 +1,8 @@
 package com.example.intervenction.implement;
 
-import com.example.intervenction.entities.Departement;
 import com.example.intervenction.entities.Etudiant;
-import com.example.intervenction.repositories.DepartementRepo;
 import com.example.intervenction.repositories.EtudiantRepo;
+import com.example.intervenction.repositories.PersonnelRepo;
 import com.example.intervenction.services.EtudiantServ;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +13,11 @@ import java.util.Optional;
 @Service
 public class EtudiantImp implements EtudiantServ {
     EtudiantRepo etudiantRepo;
+    PersonnelRepo personnelRepo;
 
-    public EtudiantImp(EtudiantRepo etudiantRepo){
+    public EtudiantImp(EtudiantRepo etudiantRepo, PersonnelRepo personnelRepo){
         this.etudiantRepo = etudiantRepo;
+        this.personnelRepo = personnelRepo;
     }
 
     @Override
@@ -25,7 +26,6 @@ public class EtudiantImp implements EtudiantServ {
         etudiantRepo.findAll().forEach(liste::add);
         return liste;
     }
-
 
 
     @Override
@@ -37,11 +37,12 @@ public class EtudiantImp implements EtudiantServ {
 
     @Override
     public String add(Etudiant etudiant) {
+        etudiant.setStatut("actif");
         Etudiant save = etudiantRepo.save(etudiant);
         if (save != null) {
             return "L'étudiant <b> " + etudiant.getNom().toUpperCase() + " </b> à bien été enregistré";
         }else {
-            return "L'étudiant n'a pas été enregistré";
+            return "Désolé mais cet étudiant n'a pas pue etre enregistré";
         }
     }
 
@@ -60,13 +61,24 @@ public class EtudiantImp implements EtudiantServ {
             etudiant1.setMatricule(etudiant.getMatricule());
             Etudiant save = etudiantRepo.save(etudiant1);
             if (save != null) {
-                return "L'étudiant <b> " + etudiant.getNom().toUpperCase() + " </b> à été modifié";
+                return "Les infos de l'étudiant <b> " + etudiant.getNom().toUpperCase() + " </b> ont bien été modifiées";
             }else {
-                return "L'étudiant <b> " +  etudiant.getNom().toUpperCase() + " </b> n'a pas été modifié";
+                return "Les infos de l'étudiant <b> " +  etudiant.getNom().toUpperCase() + " </b> n'ont pas été modifiées";
             }
         }
         else {
             throw new IllegalArgumentException("Le département est introuvable, ID : " + id);
+        }
+    }
+
+
+    @Override
+    public Etudiant login(String login, String password) {
+        Etudiant etudiant = etudiantRepo.findByLoginAndPassword(login, password);
+        if (etudiant == null) {
+            return null;
+        }else{
+            return etudiant;
         }
     }
 

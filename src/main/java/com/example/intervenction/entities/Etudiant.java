@@ -1,9 +1,6 @@
 package com.example.intervenction.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.PrimaryKeyJoinColumn;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
@@ -16,9 +13,20 @@ import java.util.List;
 @Setter
 @Data
 @Table(name = "etudiants")
-public class Etudiant extends Utilisateur{
+public class Etudiant {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String nom;
+    private String email;
+    private String telephone;
+    private String login;
+    private String password;
+    private String statut;
     private String matricule;
 
-    @OneToMany(mappedBy = "etudiant")
-    private List<Demande> demandes;
+
+    @ManyToOne
+    @JoinColumn(name = "etudiant_id")
+    private Etudiant etudiant;
 }

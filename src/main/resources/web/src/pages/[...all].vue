@@ -16,8 +16,8 @@ const authThemeMask = computed(() => {
   <div class="misc-wrapper">
     <ErrorHeader
       error-code="404"
-      error-title="Page Not Found ⚠️"
-      error-description="We couldn't find the page you are looking for."
+      error-title="Page introuvable ⚠️"
+      error-description="Désolé la ressource est actuellement indisponible."
     />
 
     <!-- 👉 Image -->
@@ -25,32 +25,22 @@ const authThemeMask = computed(() => {
       <VImg
         :src="misc404"
         alt="Coming Soon"
-        :max-width="800"
+        :max-width="300"
         class="mx-auto"
       />
       <VBtn
         to="/"
         class="mt-10"
       >
-        Back to Home
+        Page d'acceuil
       </VBtn>
     </div>
 
-    <!-- 👉 Footer -->
-    <VImg
-      :src="tree"
-      class="misc-footer-tree d-none d-md-block"
-    />
-
-    <VImg
-      :src="authThemeMask"
-      class="misc-footer-img d-none d-md-block"
-    />
   </div>
 </template>
 
 <style lang="scss">
-@use "@core/scss/pages/misc.scss";
+@use '@core/scss/pages/misc.scss';
 
 .misc-footer-tree {
   inline-size: 15.625rem;

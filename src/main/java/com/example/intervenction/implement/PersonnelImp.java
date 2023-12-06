@@ -42,41 +42,42 @@ public class PersonnelImp implements PersonnelServ {
     @Override
     public String add(Long departement_id, Personnel personnel) {
         Optional<Departement> departementOptional = departementRepo.findById(departement_id);
-        if (departementOptional == null) {
+        if (departementOptional != null) {
             Departement departement = departementOptional.get();
             personnel.setDepartement(departement);
             Personnel save = personnelRepo.save(personnel);
             if (save != null) {
-                return "Le personnel <b> " + personnel.getNom().toUpperCase() + " </b> à été modifié";
+                return "Les infos du personnel <b> " + personnel.getNom().toUpperCase() + " </b> ont été modifiées pour le département " + departement.getNom();
             }else {
-                return "Le département <b> " +  personnel.getNom().toUpperCase() + " </b> n'a pas été modifié";
+                return "Les infos du personnel <b> " + personnel.getNom().toUpperCase() + " </b> n'ont pas été modifiées";
             }
         }else {
-            throw new IllegalArgumentException("Le personnel est introuvable, ID : " + departement_id);
+            throw new IllegalArgumentException("Le département est introuvable, ID : " + departement_id);
         }
     }
 
     @Override
     public String updte(Long personnel_id, Long departement_id, Personnel personnel) {
         Optional<Departement> departementOptional = departementRepo.findById(departement_id);
-        if (departementOptional == null) {
+        if (departementOptional != null) {
             Departement departement = departementOptional.get();
             personnel.setDepartement(departement);
             Optional<Personnel> personnelOptional = personnelRepo.findById(departement_id);
-            if (departementOptional == null) {
+            if (departementOptional != null) {
                 Personnel personnel1 = personnelOptional.get();
                 personnel1.setDepartement(departement);
                 personnel1.setNom(personnel.getNom());
-                personnel1.setLogin(personnel.getLogin());
                 personnel1.setEmail(personnel.getEmail());
-                personnel1.setPassword(personnel.getPassword());
                 personnel1.setTelephone(personnel.getTelephone());
+                personnel1.setLogin(personnel.getLogin());
+                personnel1.setPassword(personnel.getPassword());
                 personnel1.setPoste(personnel.getPoste());
+                personnel1.setStatut("actif");
                 Personnel save = personnelRepo.save(personnel1);
                 if (save != null) {
-                    return "Le personnel <b> " + personnel.getNom().toUpperCase() + " </b> à été modifié";
+                    return "Les infos du personnel <b> " + personnel.getNom().toUpperCase() + " </b> ont été modifiées";
                 }else {
-                    return "Le département <b> " +  personnel.getNom().toUpperCase() + " </b> n'a pas été modifié";
+                    return "Les infos du personnel <b> " + personnel.getNom().toUpperCase() + " </b> n'ont pas pue etre modifiées";
                 }
             }else {
                 throw new IllegalArgumentException("Le personnel est introuvable, ID : " + personnel_id);
@@ -101,6 +102,19 @@ public class PersonnelImp implements PersonnelServ {
         }
         else {
             throw new IllegalArgumentException("Le compte du personnel est introuvable, ID : " + id);
+        }
+    }
+
+
+
+
+    @Override
+    public Personnel login(String login, String password) {
+        Personnel personnel = personnelRepo.findByLoginAndPassword(login, password);
+        if (personnel == null) {
+            return null;
+        }else{
+            return personnel;
         }
     }
 

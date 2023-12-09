@@ -30,7 +30,9 @@ jobs:
 
       - name: Installation des dépendances
         run: mvn package
-        build: mvn clean install -X
+
+      - name: Build avec options de débogage
+        run: mvn clean install -X
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3

@@ -38,7 +38,7 @@ jobs:
         run: mvn package
 
       - name: Build avec options de débogage
-        run: mvn clean install -x
+        run: mvn clean install -X
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3

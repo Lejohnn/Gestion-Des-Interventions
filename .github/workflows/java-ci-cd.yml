@@ -18,7 +18,7 @@ jobs:
       mysql:
         image: mysql:latest
         env:
-          MYSQL_ROOT_PASSWORD: 
+          MYSQL_ROOT_PASSWORD: lorraine@19970
           MYSQL_DATABASE: intervenction
         ports:
           - 3306:3306

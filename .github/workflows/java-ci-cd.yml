@@ -14,6 +14,14 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:latest
+        env:
+          MYSQL_ROOT_PASSWORD: 
+          MYSQL_DATABASE: intervenction
+        ports:
+          - 3306:3306
 
     steps:
       - name: Recuperation du code
@@ -22,7 +30,7 @@ jobs:
       - name: Setup JDK
         uses: actions/setup-java@v2
         with:
-          distribution: 'adopt'
+          distribution: 'oracle'
           java-version: '17'
           cache: maven
 
@@ -30,7 +38,7 @@ jobs:
         run: mvn package
 
       - name: Build avec options de débogage
-        run: mvn clean install -X
+        run: mvn clean install -x
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3

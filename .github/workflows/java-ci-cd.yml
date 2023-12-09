@@ -5,27 +5,31 @@ on:
     branches:
       - main
 
-  
   pull_request:
     branches:
       - main
-    
+
 jobs:
   build:
     runs-on: ubuntu-latest
-      steps: 
-        - name: Recuperation du code
-          uses: actions/checkout@v2
-        - name: Setup JDK
-          uses: actions/setup-java@1
-          with:
-            distribution: 'oracle'
-            java-version: '17'
-            cache: maven
-        - name: Installation des dépendances
-          run: mvn package 
-          build: mvn clean install -X   
-        - name: Upload artifacts@v3
-          with:
-            - name: Java artifact
-            - path: target\intervenction-0.0.1-SNAPSHOT.jar
+
+    steps:
+      - name: Recuperation du code
+        uses: actions/checkout@v2
+
+      - name: Setup JDK
+        uses: actions/setup-java@1
+        with:
+          distribution: 'oracle'
+          java-version: '17'
+          cache: maven
+
+      - name: Installation des dépendances
+        run: mvn package
+        build: mvn clean install -X
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: Java artifact
+          path: target/intervention-0.0.1-SNAPSHOT.jar

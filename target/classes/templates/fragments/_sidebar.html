@@ -1,0 +1,56 @@
+<html xmlns:th="http://www.thymeleaf.org" >
+
+<th:block th:fragment="navNotes">
+
+    <nav class="sidebar sidebar-offcanvas" id="sidebar" >
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{dashboard}">
+                    <i class="bi bi-arrow-left-circle-fill menu-icon "></i>
+                    <span class="menu-title">Retour à l'ENT</span>
+                </a>
+            </li>
+            <li class="nav-item" id="item-link-personnel1">
+                <a class="nav-link" th:href="@{categorie}">
+                    <i class="icon-grid menu-icon"></i>
+                    <span class="menu-title">Catégories</span>
+                </a>
+            </li>
+            <li class="nav-item" id="item-link-personnel2">
+                <a class="nav-link" th:href="@{others}">
+                    <i class="icon-grid menu-icon"></i>
+                    <span class="menu-title">Sous Catégories</span>
+                </a>
+            </li>
+            <li class="nav-item" id="item-link-personnel3">
+                <a class="nav-link" th:href="@{departement}">
+                    <i class="icon-grid menu-icon"></i>
+                    <span class="menu-title">Départements</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{demande}">
+                    <i class="icon-layout menu-icon"></i>
+                    <span class="menu-title">Demandes</span>
+                </a>
+            </li>
+
+            <li class="nav-item d-none">
+                <a class="nav-link" th:href="@{personnel}">
+                    <i class="icon-layout menu-icon"></i>
+                    <span class="menu-title">Personnel</span>
+                </a>
+            </li>
+
+            <li class="nav-item  d-none">
+                <a class="nav-link" th:href="@{etudiant}">
+                    <i class="icon-layout menu-icon"></i>
+                    <span class="menu-title">Etudiants</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <!-- partial -->
+</th:block>
+
+</html>

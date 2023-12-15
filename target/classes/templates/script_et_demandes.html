@@ -1,0 +1,210 @@
+// **********************************FONCTION DU FICHIER SCRIPTING DANS STATIC/DATATABLE POUR LA DEMANDE ******************************************************
+
+$('#save-demande-btn-submit').on('click',function(e){
+    e.preventDefault();
+    var form = $(this).parents('form');
+    var sous_categorie_id = $("#demande_save_sous_categorie").val();
+    var objet = $("#demande_save_objet").val();
+    var message = $("#demande_save_objet").val();
+    var account = JSON.parse(localStorage.getItem('account'));
+
+
+    if((!sous_categorie_id) || (!objet) || (!message)){
+        Swal.fire({
+            hideOnOverlayClick: false,
+            hideOnContentClick: false,
+            title: "Erreur...",
+            text: "Veillez d'abord renseigné tous les champs avant de continuer!",
+            confirmButtonColor: "#3085d6",
+            confirmButtonText: "D'accord, c'est compris.",
+        });
+    }
+    else{
+        Swal.fire({
+            title: "Êtes vous sûres?",
+            html: "Souhaitez vous réelement soumettre cette demande d'intervenction ?",
+            hideOnOverlayClick: false,
+            hideOnContentClick: false,
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Je le souhaite",
+            closeOnConfirm: false
+        }).then(() => {
+            return $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: "/addDem/"+ account.id + "/"+ sous_categorie_id,
+                data: JSON.stringify({'message' : message, 'objet' : objet, 'statut' : 'receptionné', 'etudiant_id' : account.id, 'sous_categorie_id' : sous_categorie_id}),
+                cache: false
+            })
+        }).then((response) => {
+            Swal.fire({
+                position: 'center',
+                title: 'Félicitation',
+                html: response,
+                confirmButtonColor: "#3085d6",
+                confirmButtonText: "D'accord, merci.",
+            }).then(function (result) {
+                if (result.isConfirmed) {
+                    location.reload();
+                }
+            });
+        }).catch((error) => {
+            Swal.fire({
+                position: 'center',
+                title: 'Erreur',
+                html: "Des erreurs sont survenue durant la modification.",
+                confirmButtonColor: "#3085d6",
+                confirmButtonText: "D'accord, merci.",
+            })
+            console.error("An error occurred:", error);
+        });
+    }
+});
+
+
+
+
+
+
+
+// *************************************************************  DEMANDE.html dans templates/pages********************************************************
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en" html xmlns:th="http://www.thymeleaf.org" >
+
+<head>
+    <!-- Required meta tags -->
+    <th:block th:replace="fragments/_head.html::head"></th:block>
+</head>
+<body>
+<div class="container-scroller">
+    <!-- partial:partials/_navbar.html -->
+
+    <!--_header-->
+    <th:block th:replace="/fragments/_header.html::header"></th:block>
+
+    <!--fin header-->
+    <div class="container-fluid page-body-wrapper">
+        <!-- partial:partials/_settings-panel.html -->
+        <div class="theme-setting-wrapper">
+            <div id="settings-trigger"><i class="ti-settings"></i></div>
+            <div id="theme-settings" class="settings-panel">
+                <i class="settings-close ti-close"></i>
+                <p class="settings-heading">SIDEBAR SKINS</p>
+                <div class="sidebar-bg-options selected" id="sidebar-light-theme"><div class="img-ss rounded-circle bg-light border mr-3"></div>Light</div>
+                <div class="sidebar-bg-options" id="sidebar-dark-theme"><div class="img-ss rounded-circle bg-dark border mr-3"></div>Dark</div>
+                <p class="settings-heading mt-2">HEADER SKINS</p>
+                <div class="color-tiles mx-0 px-4">
+                    <div class="tiles success"></div>
+                    <div class="tiles warning"></div>
+                    <div class="tiles danger"></div>
+                    <div class="tiles info"></div>
+                    <div class="tiles dark"></div>
+                    <div class="tiles default"></div>
+                </div>
+            </div>
+        </div>
+        <!-- partial -->
+        <!-- partial:partials/_sidebar.html -->
+        <th:block th:replace="/fragments/_sidebar.html::navNotes"></th:block>
+
+        <!-- partial -->
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <div class="row">
+                    <div class="card container-fluid p-2 mb-3">
+                        <form th:action="@{/addDep}" th:object="${departement}" method="POST">
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <input type="text" name="departement_nom" id="departement_nom" th:field="*{nom}" class="form-control col-md-12 text-capitalize" placeholder="Entrez le nom de la catégorie">
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="submit" id="btn-submit-dep" class="btn btn-primary btn-block">
+                                        Enregistrer
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+
+                    <div class="card col-md-12 grid-margin " th:switch="${departementList}">
+                        <div class="card-body" th:case="*">
+                            <table id="departement" class="table table-striped table-bordered" style="width:100%">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nom</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="item : ${departementList}">
+                                    <td th:text="${item.id}"></td>
+                                    <td th:text="${item.nom}"></td>
+                                    <td>
+                                        <button type="button" id="update-link" th:attr="onclick='readyUpdateDep(\'' + ${item.id} + '\')'" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                            Modifier
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Modification d'une Catégorie</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form th:action="@{/updateDep}" th:object="${departement}" method="POST">
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <input type="hidden" name="update_departement_id" id="update_departement_id" th:field="*{id}" class="form-control col-md-12 text-capitalize" readonly>
+                                                <input type="text" name="update_departement_nom" id="update_departement_nom" th:field="*{nom}" class="form-control col-md-12 text-capitalize" placeholder="Entrez le nom de la catégorie">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="reset" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                                        <button type="submit" id="btn-update-dep"  class="btn btn-primary">Modifier</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="footer">
+                <th:block th:replace="./fragments/_footer.html::footer"></th:block>
+            </footer>
+        </div>
+    </div>
+
+    <!-- plugins:js -->
+    <th:block th:replace="./fragments/_js.html::js"></th:block>
+
+</div>
+</body>
+<script>
+
+
+</script>
+
+</html>
+

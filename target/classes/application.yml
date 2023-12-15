@@ -1,0 +1,26 @@
+#spring:
+#  mail:
+#    host: smtp.gmail.com
+#    username: hilarynyambonntamak@gmail.com
+#    password: NYAMBONgarkaBEATRICE
+#    port: 587
+#    properties:
+#      mail:
+#        smtp:
+#          starttls:
+#            enable: true
+#          auth: true
+#
+#
+spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: hilarynyambonntamak@gmail.com
+    password: nlog afzg phwk ncpe
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true

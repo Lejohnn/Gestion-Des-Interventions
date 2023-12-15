@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : lun. 27 nov. 2023 à 19:46
+-- Généré le : sam. 2 dec. 2023 à 19:46
 -- Version du serveur :  10.4.11-MariaDB
 -- Version de PHP : 7.4.5
 
@@ -111,9 +111,9 @@ CREATE TABLE `etudiants` (
 --
 
 INSERT INTO `etudiants` (`id`, `email`, `login`, `matricule`, `nom`, `password`, `statut`, `telephone`, `etudiant_id`) VALUES
-(1, 'brice.nanyang@institutsaintjean.org', '2223i393', '2223i393', 'Nanyang Brice', '2223i393', 'inactif', '657807309', NULL),
-(2, 'nanyangbrice@gmail.com', '15212001', '2021i109', 'Mabouanda', '65684651', 'inactif', '657807309', NULL),
-(3, 'nano@gmail.com', '25879667', '65665664768', 'Youmsi Merveille', '25879667', 'inactif', '657857874', NULL);
+(1, 'joyce.ytembe@institutsaintjean.org', '2223i393', '2223i393', 'Joyce Ytembe', '2223i393', 'inactif', '657807309', NULL),
+(2, 'jonathan@gmail.com', '15212001', '2021i109', 'Jonny Sonkoue', '65684651', 'inactif', '657807309', NULL),
+(3, 'jay@gmail.com', '25879667', '65665664768', 'JAY', '25879667', 'inactif', '657857874', NULL);
 
 -- --------------------------------------------------------
 
@@ -151,7 +151,7 @@ CREATE TABLE `personnels` (
 --
 
 INSERT INTO `personnels` (`id`, `email`, `login`, `nom`, `password`, `poste`, `statut`, `telephone`, `departement_id`) VALUES
-(1, 'bouba@hot.fr', '215w6v', 'bouba', 'ejgi9tcm', 'DSI', 'inactif', '699887741', 3);
+(1, 'jacquard@hot.fr', '215w6v', 'jacquard', 'ejgi9tcm', 'DSI', 'inactif', '699887741', 3);
 
 -- --------------------------------------------------------
 
